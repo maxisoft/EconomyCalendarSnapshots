@@ -26,6 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest poetry
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
     - name: Setup pypoetry cache
       uses: actions/cache@v2
       timeout-minutes: 5
@@ -37,7 +38,6 @@ jobs:
     - name: Run Poetry
       run: |
             python -m poetry install
-            python -m poetry build
             
     - name: Lint with flake8
       run: |
@@ -45,3 +45,23 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: get current week news
+      run: |
+        mkdir -p '/tmp/ecs'
+        python -m poetry run python get_current_week_news.py > /tmp/ecs/news.json
+
+    - name: save latest news to git
+      run: |
+        python -m poetry run python save_to_git.py
+      env:
+        WORKING_DIRECTORY: /tmp/ecs
+
+    - name: Push directory to another repository
+      uses: cpina/github-action-push-to-another-repository@v1.5.1
+      with:
+        source-directory: /tmp/ecs
+        destination-github-username: maxisoft-data
+        destination-repository-name: economy-calendar
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
