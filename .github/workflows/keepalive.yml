@@ -1,0 +1,19 @@
+name: Github Action with a cronjob trigger
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  push:
+  fork:
+  status:
+  issues:
+
+jobs:
+  cronjob-based-github-action:
+    name: Cronjob based github action
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          committer_username: maxisoft
+          committer_email: maxisoft.eu@gmail.com

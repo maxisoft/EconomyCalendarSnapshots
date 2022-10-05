@@ -1,8 +1,8 @@
 import datetime
+import os
+from pathlib import Path
 
 from git import Repo, Actor
-from pathlib import Path
-import os
 
 if os.getenv('WORKING_DIRECTORY'):
     os.chdir(str(Path(os.getenv('WORKING_DIRECTORY')).resolve()))
@@ -20,4 +20,3 @@ with Repo('.') as repo:
     if files:
         index.add(files)
         index.commit(f'auto commit {datetime.datetime.utcnow().isoformat()}', author=author, skip_hooks=True)
-
