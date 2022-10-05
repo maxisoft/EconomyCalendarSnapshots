@@ -4,6 +4,9 @@ from git import Repo, Actor
 from pathlib import Path
 import os
 
+if os.getenv('WORKING_DIRECTORY'):
+    os.chdir(str(Path(os.getenv('WORKING_DIRECTORY')).resolve()))
+
 if not Path('.git').exists():
     Repo.init('.').close()
 
