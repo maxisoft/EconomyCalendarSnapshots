@@ -18,7 +18,7 @@ class EconomyEvent:
     title: str
     country: str
     date: str | datetime.datetime | int | float
-    impact: str
+    impact: str = dataclasses.field(hash=False, compare=False)
     forecast: str
     previous: str
 
