@@ -1,7 +1,7 @@
-name: Github Action with a cronjob trigger
+name: Keep the repo alive
 on:
   schedule:
-    - cron: "0 12 * * *"
+    - cron: "45 18 * * *"
   push:
   fork:
   status:

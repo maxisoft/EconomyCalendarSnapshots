@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: Python application
+name: Update data & upload
 
 on:
   push:
@@ -56,17 +53,15 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: get current week news
+      - name: Get current week news
         run: |
           mkdir -p 'ecs' &&
           python -m poetry run python get_current_week_news.py > ecs/news.json
 
-      - name: 'Upload News Artifact'
+      - name: Upload News Artifact
         uses: actions/upload-artifact@v3
         with:
           name: news
@@ -78,6 +73,8 @@ jobs:
         with:
           source-directory: ecs
           destination-github-username: maxisoft-data
+          user-name: maxisoft-data
+          user-email: maxisoft.eu+data@gmail.com
           destination-repository-name: economy-calendar
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
