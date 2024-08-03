@@ -9,16 +9,20 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHON_VERSION: ${{ vars.PYTHON_VERSION || '3.11' }}
+  ACTOR_IS_OWNER: ${{ github.actor == github.repository_owner }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v3
         with:
-          python-version: "3.10"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Get pip cache dir
         id: pip-cache
@@ -27,11 +31,12 @@ jobs:
 
       - name: pip cache
         uses: actions/cache@v2
+        if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pip-
 
       - name: Install dependencies
         run: |
@@ -41,12 +46,13 @@ jobs:
 
       - name: Setup pypoetry cache
         uses: actions/cache@v2
+        if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         timeout-minutes: 5
         with:
           path: ~/AppData/Local/pypoetry/Cache
-          key: ${{ runner.os }}-pypoetry-${{ hashFiles('**/requirements.txt') }}${{ hashFiles('**/pyproject.toml') }}
+          key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pypoetry-${{ hashFiles('**/requirements.txt') }}${{ hashFiles('**/pyproject.toml') }}
           restore-keys: |
-            ${{ runner.os }}-pypoetry-
+            ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pypoetry-
       - name: Run Poetry
         run: |
           python -m poetry install
@@ -70,11 +76,14 @@ jobs:
 
       - name: Push directory to another repository
         uses: cpina/github-action-push-to-another-repository@v1.5.1
+        if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           source-directory: ecs
-          destination-github-username: maxisoft-data
-          user-name: maxisoft-data
-          user-email: ${GITHUB_ACTOR}@users.noreply.github.com
-          destination-repository-name: economy-calendar
+          destination-github-username: ${{ env.DESTINATION_REPOSITORY_USERNAME || var.DESTINATION_REPOSITORY_USERNAME || 'maxisoft-data' }}
+          user-name: ${{ github.actor }}
+          user-email: ${{ github.actor }}@users.noreply.github.com
+          destination-repository-name: ${{ env.DESTINATION_REPOSITORY_NAME || var.DESTINATION_REPOSITORY_NAME || 'economy-calendar' }}
+          create-target-branch-if-needed: ${{ vars.DEPLOY_TO_REPOSITORY_CREATE_TARGET_BRANCH_IF_NEEDED || true }}
+          target-branch: ${{ env.DEPLOY_TO_REPOSITORY_TARGET_BRANCH || vars.DEPLOY_TO_REPOSITORY_TARGET_BRANCH || 'main' }}
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
