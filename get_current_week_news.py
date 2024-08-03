@@ -21,6 +21,7 @@ class EconomyEvent:
     impact: str = dataclasses.field(hash=False, compare=False)
     forecast: str
     previous: str
+    url: str = ''
 
     def post_parse(self):
         if self.date and isinstance(self.date, str):
@@ -30,6 +31,9 @@ class EconomyEvent:
         if self.country:
             self.country = self.country.upper()
 
+    def __post_init__(self):
+        self.post_parse()
+
 
 def download_news(urls=_urls) -> list[EconomyEvent]:
     coll = OrderedDict()  # use only OrderedDict's keys to mimic an OrderedSet
@@ -38,7 +42,6 @@ def download_news(urls=_urls) -> list[EconomyEvent]:
             payload = session.get(url).json()
             for item in payload:
                 event = EconomyEvent(**item)
-                event.post_parse()
                 coll[event] = True
 
     return sorted(coll.keys(), key=lambda x: x.date)
