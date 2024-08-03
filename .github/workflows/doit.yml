@@ -79,10 +79,10 @@ jobs:
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           source-directory: ecs
-          destination-github-username: ${{ env.DESTINATION_REPOSITORY_USERNAME || var.DESTINATION_REPOSITORY_USERNAME || 'maxisoft-data' }}
+          destination-github-username: ${{ env.DESTINATION_REPOSITORY_USERNAME || vars.DESTINATION_REPOSITORY_USERNAME || 'maxisoft-data' }}
           user-name: ${{ github.actor }}
           user-email: ${{ github.actor }}@users.noreply.github.com
-          destination-repository-name: ${{ env.DESTINATION_REPOSITORY_NAME || var.DESTINATION_REPOSITORY_NAME || 'economy-calendar' }}
+          destination-repository-name: ${{ env.DESTINATION_REPOSITORY_NAME || vars.DESTINATION_REPOSITORY_NAME || 'economy-calendar' }}
           create-target-branch-if-needed: ${{ vars.DEPLOY_TO_REPOSITORY_CREATE_TARGET_BRANCH_IF_NEEDED || true }}
           target-branch: ${{ env.DEPLOY_TO_REPOSITORY_TARGET_BRANCH || vars.DEPLOY_TO_REPOSITORY_TARGET_BRANCH || 'main' }}
         env:
