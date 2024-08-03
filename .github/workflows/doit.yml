@@ -22,22 +22,17 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
       - name: pip cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ~/.cache/pip
           key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pip-
@@ -64,16 +59,11 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-
       - name: pip cache
         uses: actions/cache@v4
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
+          path: ~/.cache/pip
           key: ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.PYTHON_VERSION }}-pip-
@@ -96,7 +86,7 @@ jobs:
 
       - name: Run Poetry
         run: |
-          python -m poetry install
+          python -m poetry install --no-root
 
       - name: Lint with flake8
         run: |
