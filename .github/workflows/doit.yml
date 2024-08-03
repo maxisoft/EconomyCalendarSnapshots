@@ -124,6 +124,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: news
+          path: '${{ github.workspace }}/ecs'
 
       - name: Test news data
         run: |
@@ -140,6 +141,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: news
+          path: '${{ github.workspace }}/ecs'
 
       - name: Push directory to another repository
         uses: cpina/github-action-push-to-another-repository@v1.7.2
