@@ -68,7 +68,7 @@ jobs:
           python -m poetry run python get_current_week_news.py > ecs/news.json
 
       - name: Upload News Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: news
           path: ecs/news.json
