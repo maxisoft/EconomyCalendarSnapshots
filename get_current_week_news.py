@@ -21,7 +21,7 @@ class EconomyEvent:
     impact: str = dataclasses.field(hash=False, compare=False)
     forecast: str
     previous: str
-    url: str = ''
+    url: str = dataclasses.field(default='', hash=False, compare=False)
 
     def post_parse(self):
         if self.date and isinstance(self.date, str):
