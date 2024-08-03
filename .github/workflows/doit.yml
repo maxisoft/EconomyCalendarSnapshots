@@ -30,7 +30,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: pip cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
@@ -45,7 +45,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Setup pypoetry cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         timeout-minutes: 5
         with:
