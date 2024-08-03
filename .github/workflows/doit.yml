@@ -58,9 +58,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ lint ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -70,7 +70,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: pip cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
@@ -85,7 +85,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Setup pypoetry cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         timeout-minutes: 5
         with:
@@ -141,7 +141,7 @@ jobs:
           name: news
 
       - name: Push directory to another repository
-        uses: cpina/github-action-push-to-another-repository@v1.5.1
+        uses: cpina/github-action-push-to-another-repository@v1.7.2
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           source-directory: ecs
