@@ -75,7 +75,7 @@ jobs:
           retention-days: 1
 
       - name: Push directory to another repository
-        uses: cpina/github-action-push-to-another-repository@v1.5.1
+        uses: cpina/github-action-push-to-another-repository@v1.7.2
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           source-directory: ecs
