@@ -136,7 +136,7 @@ jobs:
           name: news
           path: '${{ github.workspace }}/ecs'
 
-      - uses: actions/attest-build-provenance@v1
+      - uses: actions/attest-build-provenance@v2
         with:
           subject-path: '${{ github.workspace }}/ecs/news.json'
 
