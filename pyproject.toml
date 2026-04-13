@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.10"
 cloudscraper = ">0"
 orjson = ">0"
-GitPython = ">0"
+GitPython = ">=3.1.46"
 
 
 [build-system]
