@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-cloudscraper = ">0"
+cloudscraper = ">=1.2.71"
 orjson = ">0"
 GitPython = ">0"
 
