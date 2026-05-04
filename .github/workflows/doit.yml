@@ -141,7 +141,7 @@ jobs:
           subject-path: '${{ github.workspace }}/ecs/news.json'
 
       - name: Push directory to another repository
-        uses: cpina/github-action-push-to-another-repository@v1.7.2
+        uses: cpina/github-action-push-to-another-repository@v1.7.3
         if: ${{ env.ACTOR_IS_OWNER == 'true' }}
         with:
           source-directory: ecs
